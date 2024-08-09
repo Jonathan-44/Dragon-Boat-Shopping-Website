@@ -11,5 +11,19 @@ Rails 7.0.4
 
 PostgreSQL for database management
 
-Configuration
+1. Configuration
 Clone the repository:
+  - git clone https://github.com/your-username/dragon-boat-basic-webpage.git
+  - cd dragon-boat-basic-webpage
+
+2. Install dependencies:
+   - bundle install
+  
+3. Database Initialization
+The seed file creates sample shoppers, vendors, boats, and events, along with adding some boats to carts.
+  - rails db:migrate:reset db:seed
+
+4. Run using
+   - rails server
+  
+5. Open server using http://localhost:3000/
