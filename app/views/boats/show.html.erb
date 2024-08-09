@@ -1,0 +1,112 @@
+<h1><%= @boat.name %></h1>
+<p>Description: <%= @boat.description %></p>
+
+<% if @boat.discount.present? && @boat.discount > 0 %>
+    <p>
+      <strong>Original Price:</strong> 
+      <span style="text-decoration: line-through; color: #a0a0a0;">
+        <%= number_to_currency(@boat.price) %>
+      </span>
+    </p>
+    <p>
+      <strong>Discount:</strong> 
+      <span style="color: #ff4500;">
+        <%= @boat.discount %>%
+      </span>
+    </p>
+    <p>
+      <strong>Discounted Price:</strong> 
+      <span style="color: #28a745; font-size: 1.2em;">
+        <%= number_to_currency(@boat.price - (@boat.price * @boat.discount / 100.0)) %>
+      </span>
+    </p>
+  <% else %>
+    <p>
+      <strong>Price:</strong> 
+      <span style="color: #000;">
+        <%= number_to_currency(@boat.price) %>
+      </span>
+    </p>
+  <% end %>
+</p>
+<p>Features: <%= @boat.features %></p>
+
+<% if @boat.is_on_sale %>
+  <div>
+    <%= image_tag('on_sale.JPG', alt: 'On Sale', style: 'width: 50px; height: auto;') %>
+  </div>
+<% end %>
+
+<% if @boat.image.present? %>
+  <%= image_tag @boat.image, class: "img-fluid" %>
+<% else %>
+  <%= image_tag "defaultdragonboat.jpeg", class: "img-fluid" %>
+<% end %>
+
+<% if shopper_signed_in? %>
+  <%= button_to 'Add to Cart', add_boat_to_cart_path(boat_id: @boat.id), method: :post, class: 'btn btn-primary' %>
+<% end %>
+
+<br>
+<h3><button onclick="toggleReviews()">Reviews</button></h3>
+<div id="review-section" style="display: none;">
+  <% @boat.reviews.each do |review| %>
+    <p><strong>Rating:</strong> <%= review.rating %>/5</p>
+    <p><strong>Comment:</strong> <%= review.comment %></p>
+    <p><strong>Comment from:</strong> <%= review.shopper.email %></p>
+  <% end %>
+  <% if shopper_signed_in? %>
+    <%= form_for [@boat, @boat.reviews.build], url: boat_reviews_path(@boat) do |f| %>
+      <div class="field">
+        <%= f.label :rating %>
+        <%= f.number_field :rating, in: 1..5 %>
+      </div>
+      <div class="field">
+        <%= f.label :comment %>
+        <%= f.text_area :comment %>
+      </div>
+      <%= f.submit "Submit Review" %>
+    <% end %>
+  <% end %>
+</div>
+
+<script>
+function toggleReviews() {
+  var x = document.getElementById('review-section');
+  x.style.display = x.style.display === 'none' ? 'block' : 'none';
+}
+</script>
+
+<div class="related-products">
+  <h3>Related Products</h3>
+  <div class="related-products-container">
+    <% if @related_boats.any? %>
+      <% @related_boats.each do |related_boat| %>
+        <div class="related-product">
+          <%= link_to(boat_path(related_boat)) do %>
+            <% if related_boat.image.attached? %>
+              <%= image_tag(related_boat.image, class: "img-fluid boat-thumbnail") %>
+            <% else %>
+              <%= image_tag "defaultdragonboat.jpeg", class: "img-fluid boat-thumbnail" %>
+            <% end %>
+            <p class="boat-name"><%= related_boat.name %></p>
+          <% end %>
+        </div>
+      <% end %>
+    <% else %>
+      <p>No related products found.</p>
+    <% end %>
+  </div>
+</div>
+
+
+
+<p>
+  <%= link_to 'Back to List', purchase_boats_path, class: 'btn btn-secondary' %>
+</p>
+
+<% if vendor_signed_in? %>
+  <p>
+    <%= link_to 'Edit Boat', edit_boat_path(@boat), class: 'btn btn-warning' %>
+  </p>
+<% end %>

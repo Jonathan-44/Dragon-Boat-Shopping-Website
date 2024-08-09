@@ -1,0 +1,116 @@
+<div class="container">
+  <h1 class="my-4">Checkout</h1>
+  <div class="row">
+    <div class="col-md-8">
+      <h2>Billing Details</h2>
+      <%= form_with model: @order, url: checkout_path, local: true do |form| %>
+        <% if @order.errors.any? %>
+          <div class="alert alert-danger">
+            <h4 class="alert-heading">Oops! There were some problems with your submission:</h4>
+            <ul>
+              <% @order.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="form-group">
+          <%= form.label :name %>
+          <%= form.text_field :name, class: "form-control" %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :email %>
+          <%= form.email_field :email, class: "form-control" %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :address %>
+          <%= form.text_field :address, class: "form-control" %>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <%= form.label :city %>
+            <%= form.text_field :city, class: "form-control" %>
+          </div>
+          <div class="form-group col-md-6">
+            <%= form.label :state %>
+            <%= form.text_field :state, class: "form-control" %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :zip %>
+          <%= form.text_field :zip, class: "form-control" %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :country %>
+          <%= form.text_field :country, class: "form-control" %>
+        </div>
+
+        <h2>Payment Details</h2>
+        <div class="form-group">
+          <%= form.label :credit_card_number, "Credit Card Number" %>
+          <%= form.text_field :credit_card_number, class: "form-control" %>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <%= form.label :expiration_date, "Expiration Date (MM/YY)" %>
+            <%= form.text_field :expiration_date, class: "form-control" %>
+          </div>
+
+          <div class="form-group col-md-6">
+            <%= form.label :cvv, "CVV" %>
+            <%= form.text_field :cvv, class: "form-control" %>
+          </div>
+        </div>
+
+        <%= form.submit "Place Order", class: "btn btn-primary" %>
+      <% end %>
+    </div>
+
+    <div class="col-md-4">
+      <h2>Your Cart</h2>
+      <% if @cart_items.present? %>
+        <ul class="list-group">
+          <% @cart_items.each do |boat| %>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <%= boat.name %>
+              <% if boat.discount.present? && boat.discount > 0 %>
+    <p>
+      <strong>Original Price:</strong> 
+      <span style="text-decoration: line-through; color: #a0a0a0;">
+        <%= number_to_currency(boat.price) %>
+      </span>
+    </p>
+  
+    <p>
+      <strong>Discounted Price:</strong> 
+      <span style="color: #28a745; font-size: 1.2em;">
+        <%= number_to_currency(boat.price - (boat.price * boat.discount / 100.0)) %>
+      </span>
+    </p>
+  <% else %>
+    <p>
+      <strong>Price:</strong> 
+      <span style="color: #000;">
+        <%= number_to_currency(boat.price) %>
+      </span>
+    </p>
+  <% end %>
+            </li>
+          <% end %>
+        </ul>
+        <% if defined?(@cart) && @cart.respond_to?(:total_price) %>
+            <h3 class="my-3">Total: $<%= @cart.total_price %></h3>
+        <% end %>
+      <% else %>
+        <p>Your cart is empty.</p>
+      <% end %>
+    </div>
+  </div>
+</div>

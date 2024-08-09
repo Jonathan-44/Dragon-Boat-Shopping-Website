@@ -1,0 +1,46 @@
+<h2>Boats on Sale</h2>
+<%= search_form_for @q, url: sale_boats_path, method: :get, local: true, html: { style: 'text-align: right;' } do |form| %>
+  <div style="text-align: center;">
+    <%= form.text_field :name_or_description_or_features_or_color_cont, placeholder: "Search boats", style: 'margin-right: 10px;' %>
+    <%= form.submit "Search" %>
+  </div>
+<% end %>
+
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-12">
+      <ul class="list-group">
+        <% @boats.each do |boat| %>
+          <li class="list-group-item">
+            <div class="row">
+              <div class="col-md-3">
+                <% if boat.image.attached? %>
+                  <%= image_tag boat.image, class: "img-fluid" %>
+                <% else %>
+                  <%= image_tag "defaultdragonboat.jpeg", class: "img-fluid" %>
+                <% end %>
+              </div>
+              <div class="col-md-8">
+                <h3><%= link_to boat.name, boat_path(boat) %></h3>
+                <p><%= boat.description %></p>
+                <p><strong>Original Price:</strong> <%= number_to_currency(boat.price) %></p>
+                <% if boat.discount_applied? %>
+                  <p><strong>Discounted Price:</strong> <%= number_to_currency(boat.price - (boat.price * (boat.discount / 100))) %></p>
+                <% end %>
+                <p><strong>Features:</strong> <%= boat.features %></p>
+                <% if shopper_signed_in? %>
+                  <%= button_to 'Add to Cart', add_boat_to_cart_path(boat_id: boat.id), method: :post, class: 'btn btn-primary' %>
+                <% end %>
+              </div>
+              <div class="col-md-1">
+                <% if boat.is_on_sale %>
+                  <%= image_tag('on_sale.JPG', class: "img-fluid", alt: "On Sale") %>
+                <% end %>
+              </div>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</div>

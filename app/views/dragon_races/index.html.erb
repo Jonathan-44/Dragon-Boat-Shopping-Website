@@ -1,0 +1,38 @@
+<h1>Past Dragon Races</h1>
+
+<% if current_shopper || current_vendor %>
+  <%= link_to 'New Dragon Race', new_dragon_race_path, class: 'btn btn-primary' %>
+<% end %>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Date</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @dragon_races.each do |dragon_race| %>
+      <tr>
+        <td><%= link_to dragon_race.name, dragon_race %></td>
+        <td><%= dragon_race.date.strftime('%m/%d/%Y') %></td>
+        <td>
+          <%= link_to 'View Placements', dragon_race_placements_path(dragon_race), class: 'btn btn-info' %>
+          <% if current_shopper || current_vendor %>
+            <%= link_to 'Edit', edit_dragon_race_path(dragon_race), class: 'btn btn-secondary' %>
+            <%= form_with(url: dragon_race_path(dragon_race), method: :delete, data: { confirm: 'Are you sure?' }, class: 'inline-form') do %>
+              <%= submit_tag 'Delete', class: 'btn btn-danger' %>
+            <% end %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<style>
+  .inline-form {
+    display: inline;
+  }
+</style>

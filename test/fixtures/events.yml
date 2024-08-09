@@ -1,0 +1,25 @@
+# == Schema Information
+#
+# Table name: events
+#
+#  id          :bigint           not null, primary key
+#  date        :datetime
+#  description :text
+#  location    :string
+#  name        :string
+#  url         :string
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#
+
+one:
+  name: MyString
+  date: 2024-07-28 11:09:25
+  location: MyString
+  description: MyText
+
+two:
+  name: MyString
+  date: 2024-07-28 11:09:25
+  location: MyString
+  description: MyText

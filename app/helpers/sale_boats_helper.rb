@@ -1,0 +1,2 @@
+module SaleBoatsHelper
+end

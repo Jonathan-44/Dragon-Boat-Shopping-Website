@@ -1,0 +1,39 @@
+<h1 class="my-4">Add New Boat</h1>
+
+<%= form_with(model: @boat, local: true, html: { class: 'needs-validation' }, data: { turbo: false }) do |form| %>
+  <div class="form-group">
+    <%= form.label :name, 'Name', class: 'control-label' %>
+    <%= form.text_field :name, class: 'form-control', placeholder: 'Enter boat name' %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :description, 'Description', class: 'control-label' %>
+    <%= form.text_area :description, rows: 5, class: 'form-control', placeholder: 'Describe the boat' %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :price, 'Price', class: 'control-label' %>
+    <%= form.number_field :price, class: 'form-control', placeholder: 'Enter price' %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :features, 'Features', class: 'control-label' %>
+    <%= form.text_field :features, class: 'form-control', placeholder: 'List the features' %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :is_on_sale, 'Mark as Sale' %>
+    <%= form.check_box :is_on_sale %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :image, 'Upload Image' %>
+    <%= form.file_field :image, accept: 'image/png,image/jpeg' %>
+  </div>
+
+  <%= form.submit 'Create Boat', class: 'btn btn-primary my-3' %>
+<% end %>
+
+<p>
+  <%= link_to 'Back', boats_path, class: 'btn btn-outline-primary' %>
+</p>

@@ -1,0 +1,34 @@
+<h1><%= @dragon_race.name %></h1>
+<p>Date: <%= @dragon_race.date.strftime('%m/%d/%Y') %></p>
+
+<h2>Placements</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Participant</th>
+      <th>Position</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @dragon_race.placements.each do |placement| %>
+      <tr>
+        <td><%= placement.participant %></td>
+        <td><%= placement.position %></td>
+        <td>
+          <%= link_to 'Show', dragon_race_placement_path(@dragon_race, placement), class: 'btn btn-info' %>
+          <% if current_shopper || current_vendor %>
+            <%= link_to 'Edit', edit_dragon_race_placement_path(@dragon_race, placement), class: 'btn btn-secondary' %>
+            <%= button_to 'Delete', dragon_race_placement_path(@dragon_race, placement), method: :delete, data: { turbo_confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<% if current_shopper || current_vendor %>
+  <%= link_to 'New Placement', new_dragon_race_placement_path(@dragon_race), class: 'btn btn-primary' %>
+<% end %>
+<%= link_to 'Back to Dragon Races', dragon_races_path, class: 'btn btn-secondary' %>

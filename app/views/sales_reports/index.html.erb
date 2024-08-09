@@ -1,0 +1,33 @@
+<h1>Sales Reports</h1>
+
+<% if @sales_reports.empty? %>
+  <p>You have yet to sell any boats.</p>
+<% else %>
+  <% total_sales = 0 %>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Boat Name</th>
+        <th>Price</th>
+        <th>Sold At</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @sales_reports.each do |report| %>
+        <tr>
+          <td><%= link_to report.boat.name, boat_path(report.boat) %></td>
+          <td><%= number_to_currency(report.boat.price) %></td>
+          <td><%= report.sold_at %></td>
+          <td>
+            <% if report.boat.sold? %>
+              <%= button_to 'Restock Boat', restock_boat_path(report.boat), method: :post, class: 'btn btn-primary' %>
+            <% end %>
+          </td>
+        </tr>
+        <% total_sales += report.boat.price %>
+      <% end %>
+    </tbody>
+  </table>
+  <h2>Total Sales: <%= number_to_currency(total_sales) %></h2>
+<% end %>

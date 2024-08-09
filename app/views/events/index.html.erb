@@ -1,0 +1,51 @@
+<html>
+<head>
+  <title>Upcoming Events</title>
+</head>
+<body>
+  <header>
+    <h1>Upcoming Events</h1>
+  </header>
+  <main class="container">
+    <%= form_with(url: events_path, method: :get, local: true) do %>
+      <div class="form-group">
+        <%= label_tag :search, 'Search by Name' %>
+        <%= text_field_tag :search, params[:search], class: 'form-control' %>
+      </div>
+      <div class="form-group d-flex align-items-center">
+        <%= submit_tag 'Search', class: 'btn btn-primary' %>
+        <%= link_to 'Sort by Date', events_path(sort: 'date'), class: 'btn btn-primary ml-2' %>
+      </div>
+    <% end %>
+
+    <% if current_shopper || current_vendor %>
+      <div class="form-group">
+        <%= link_to 'Create New Event', new_event_path, class: 'btn btn-primary mb-4' %>
+      </div>
+    <% end %>
+
+    <section id="events">
+      <h2>Events List</h2>
+      <ul class="list-unstyled">
+        <% @events.each do |event| %>
+          <li class="mb-4">
+            <strong><a href="<%= event_path(event) %>"><%= event.name %></a></strong> - <%= event.date.strftime("%B %d, %Y") %> - <%= event.location %><br>
+            <%= event.description %><br>
+            <a href="<%= event.url %>" target="_blank"><%= event.url %></a><br>
+            
+            <% if current_shopper || current_vendor %>
+              <div class="d-flex justify-content-start mt-2">
+                <%= link_to 'Edit', edit_event_path(event), class: 'btn btn-secondary mr-2' %>
+                <%= form_with(model: event, method: :delete, data: { turbo_confirm: 'Are you sure?' }) do |f| %>
+                  <%= f.submit 'Delete', class: 'btn btn-danger' %>
+                <% end %>
+              </div>
+            <% end %>
+          </li>
+          <hr>
+        <% end %>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>

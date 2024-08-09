@@ -1,0 +1,54 @@
+<h1>Your Cart</h1>
+
+<% if shopper_signed_in? %>
+  <h2>Cart for <%= @cart.shopper.email %></h2>
+
+    <% if @cart.boats.any? %>
+      <h3>Boats in Cart:</h3>
+        <ul class="list-unstyled">
+          <% @cart.boats.each do |boat| %>
+            <li class="mb-2">
+              <strong>Name:</strong> <%= boat.name %>, 
+              <strong>Color:</strong> <%= boat.color %>, 
+              <strong>Description:</strong> <%= boat.description %>, 
+              <% if boat.discount.present? && boat.discount > 0 %>
+    <p>
+      <strong>Original Price:</strong> 
+      <span style="text-decoration: line-through; color: #a0a0a0;">
+        <%= number_to_currency(boat.price) %>
+      </span>
+    </p>
+    <p>
+      <strong>Discount:</strong> 
+      <span style="color: #ff4500;">
+        <%= boat.discount %>%
+      </span>
+    </p>
+    <p>
+      <strong>Discounted Price:</strong> 
+      <span style="color: #28a745; font-size: 1.2em;">
+        <%= number_to_currency(boat.price - (boat.price * boat.discount / 100.0)) %>
+      </span>
+    </p>
+  <% else %>
+    <p>
+      <strong>Price:</strong> 
+      <span style="color: #000;">
+        <%= number_to_currency(boat.price) %>
+      </span>
+    </p>
+  <% end %>
+              <%= button_to 'Remove from Cart', remove_boat_from_cart_path(boat_id: boat.id),
+                        method: :delete, class: 'btn btn-danger btn-sm' %>
+          <% end %>
+        </ul>
+    <% else %>
+      <p>Your cart is currently empty.</p>
+    <% end %>
+
+<% end %>
+
+<%= link_to 'Checkout', checkout_path, class: 'btn btn-primary' %>
+
+
+

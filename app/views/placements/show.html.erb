@@ -1,0 +1,5 @@
+<h1><%= @placement.race_name %></h1>
+<p>Participant: <%= @placement.participant %></p>
+<p>Position: <%= @placement.position %></p>
+<%= link_to 'Edit', edit_dragon_race_placement_path(@placement.dragon_race, @placement), class: 'btn btn-secondary' %>
+<%= link_to 'Back to Placements', dragon_race_placements_path(@placement.dragon_race), class: 'btn btn-primary' %>

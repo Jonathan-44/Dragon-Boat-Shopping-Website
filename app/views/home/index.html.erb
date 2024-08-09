@@ -1,0 +1,14 @@
+<section id="schedule">
+  <h2 class="centered">Schedule</h2>
+</section>
+<section id="events">
+  <h2>Upcoming Events</h2>
+  <ul>
+    <% @events.each do |event| %>
+      <li>
+        <a href="<%= event_path(event) %>"><%= event.name %></a> - <%= event.date.strftime("%B %d, %Y") %> - <%= event.location %><br>
+        <%= event.description %>
+      </li>
+    <% end %>
+  </ul>
+</section>

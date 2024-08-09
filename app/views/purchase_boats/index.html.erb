@@ -1,0 +1,93 @@
+<%= search_form_for @q, url: purchase_boats_path, method: :get, local: true, html: { style: 'text-align: right;' } do |form| %>
+  <div class="container">
+    <div class="row justify-content-center align-items-center mb-3">
+      <div class="col-md-4 text-center">
+        <%= form.text_field :name_or_description_or_features_or_color_cont, placeholder: "Search boats", class: "form-control d-inline-block w-auto", style: 'margin-right: 5px;' %>
+        <%= form.submit "Search", class: "btn btn-primary d-inline-block" %>
+      </div>
+      <div class="col-md-3 text-center">
+        <%= form.label :s, "Sort By", class: "form-label" %>
+        <%= form.select :s, options_for_select([['Name (A-Z)', 'name asc'], ['Name (Z-A)', 'name desc'], ['Price (Low to High)', 'price asc'], ['Price (High to Low)', 'price desc'], ['Color (A-Z)', 'color asc'], ['Color (Z-A)', 'color desc'], ['Features (A-Z)', 'features asc'], ['Features (Z-A)', 'features desc']]), {}, { class: "form-control d-inline-block w-auto", style: 'margin-right: 5px;' } %>
+      </div>
+      <div class="col-md-3 text-center">
+        <%= form.label :color_eq, "Filter by Color", class: "form-label" %>
+        <%= form.select :color_eq, options_for_select(Boat.pluck(:color).uniq), { include_blank: 'All Colors' }, { class: "form-control d-inline-block w-auto", style: 'margin-right: 5px;' } %>
+      </div>
+      <div class="col-md-1 text-center">
+        <%= button_to 'Clear Filters', purchase_boats_path, method: :get, class: "btn btn-secondary d-inline-block" %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-12">
+      <h1>Boats for Purchase</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <ul class="list-group">
+        <% @boats.each do |boat| %>
+          <li class="list-group-item">
+            <div class="row">
+              <div class="col-md-3">
+                <% if boat.image.present? %>
+                    <%= image_tag boat.image, class: "img-fluid" %>
+                <% else %>
+                    <%= image_tag "defaultdragonboat.jpeg", class: "img-fluid" %>
+                <% end %>
+              </div>
+              <div class="col-md-9">
+                <h3> <%= link_to boat.name, boat_path(boat) %></h3>
+                <p><%= boat.description %></p>
+                <% if boat.discount.present? && boat.discount > 0 %>
+                    <p>
+                      <strong>Original Price:</strong> 
+                      <span style="text-decoration: line-through; color: #a0a0a0;">
+                        <%= number_to_currency(boat.price) %>
+                      </span>
+                    </p>
+                    <p>
+                      <strong>Discount:</strong> 
+                      <span style="color: #ff4500;">
+                        <%= boat.discount %>%
+                      </span>
+                    </p>
+                    <p>
+                      <strong>Discounted Price:</strong> 
+                      <span style="color: #28a745; font-size: 1.2em;">
+                        <%= number_to_currency(boat.price - (boat.price * boat.discount / 100.0)) %>
+                      </span>
+                    </p>
+                  <% else %>
+                    <p>
+                      <strong>Price:</strong> 
+                      <span style="color: #000;">
+                        <%= number_to_currency(boat.price) %>
+                      </span>
+                    </p>
+                  <% end %>
+                <p><strong>Features:</strong> <%= boat.features %></p>
+
+                <% if shopper_signed_in? %>
+                  <% unless current_shopper.cart.boats.include?(boat) %>
+                    <%= button_to 'Add to Cart', add_boat_to_cart_path(boat_id: boat.id), method: :post, class: 'btn btn-primary' %>
+                  <% else %>
+                    <p class="text-danger">This boat is already in your cart.</p>
+                  <% end %>
+                <% end %>
+              </div>
+              <div class="col-md-1">
+                <% if boat.is_on_sale %>
+                  <%= image_tag('on_sale.JPG', class: "img-fluid", alt: "On Sale") %>
+                <% end %>
+              </div>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</div>
