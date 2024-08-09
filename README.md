@@ -1,24 +1,15 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Dragon Boat Basic Webpage
+This project is a web application for purchasing dragon boats, designed to allow vendors to list boats for sale, while shoppers can browse, filter, and purchase boats. The application includes features such as image uploads for boats, sorting and filtering options, an integrated cart system, and event listings.
 
-Things you may want to cover:
+Ruby Version
+Ruby 3.1.2
 
-* Ruby version
+System Dependencies
+Rails 7.0.4
 
-* System dependencies
+PostgreSQL for database management
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Configuration
+Clone the repository:
